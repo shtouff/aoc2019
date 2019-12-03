@@ -3,6 +3,7 @@
 
 from copy import copy
 import click
+import sys
 
 
 def load_program():
@@ -57,21 +58,33 @@ def dump(program, memory):
 
 
 program = load_program()
-memory = copy(program)
-pointer = 0
-
-# fixes from error 1202
-memory[1] = 12
-memory[2] = 2
 
 
-try:
-    while True:
-        pointer = run_opcode(memory, pointer)
-except HaltError:
-    click.secho('Program ran successfully:', fg='green')
-except UnknownOpcodeError:
-    click.secho(f'Unknown opcode: {memory[pointer]} at position {pointer}:', fg='red')
+def puzzle(noun, verb):
+    memory = copy(program)
+    pointer = 0
 
-dump(program, memory)
+    # fixes from error 1202
+    memory[1] = noun
+    memory[2] = verb
+
+    try:
+        while True:
+            pointer = run_opcode(memory, pointer)
+    except HaltError:
+        click.secho('Program ran successfully:', fg='green')
+    except UnknownOpcodeError:
+        click.secho(f'Unknown opcode: {memory[pointer]} at position {pointer}:', fg='red')
+
+    dump(program, memory)
+    return memory[0]
+
+
+
+#print(puzzle(noun=12, verb=2))
+for noun in range(100):
+    for verb in range(100):
+        if puzzle(noun, verb) == 19690720:
+            print(f'{noun}, {verb} => {noun*100+verb}')
+            sys.exit(0)
 
