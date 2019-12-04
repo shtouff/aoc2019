@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
-
-
 from copy import copy
-import click
-import sys
 
 
 def load_wires():
     with open('input', 'r') as program:
         one, two = program.readlines()
         return one.split(','), two.split(',')
-
 
 
 def trace_line_from_center(line):
@@ -37,8 +32,10 @@ def manhattan_distance(pa, pb):
 
 
 one, two = load_wires()
-s1 = set(trace_line_from_center(one))
-s2 = set(trace_line_from_center(two))
+pts1 = trace_line_from_center(one)
+pts2 = trace_line_from_center(two)
+s1 = set(pts1)
+s2 = set(pts2)
 print(f'{len(s1)} points in wire #1')
 print(f'{len(s2)} points in wire #2')
 
@@ -49,3 +46,12 @@ print(collisions)
 distances = [manhattan_distance((0, 0), p) for p in collisions]
 print(f'manhattan distances for all these collisions, sorted: ')
 print(sorted(distances))
+
+combined_steps = {}
+for p in collisions:
+    combined_steps[p] = pts1.index(p) + pts2.index(p)
+
+print(f'Combined steps to reach these collisions: ')
+print(combined_steps)
+print('Lowest combined distance: ')
+print(min(combined_steps.values()))
