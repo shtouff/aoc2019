@@ -215,7 +215,7 @@ def boost():
     p = Process(target=run, args=(program, stdin, stdout))
     p.start()
 
-    pout.send(1)
+    pout.send(2)
     p.join()
     stdout.close()
     lines = []
